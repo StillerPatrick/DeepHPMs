@@ -157,6 +157,7 @@ class DeepHPM:
         return u, v
     
     def net_pde(self, terms):
+        print(terms.shape)
         pde_u = neural_net(terms, self.pde_u_weights, self.pde_u_biases)
         pde_v = neural_net(terms, self.pde_v_weights, self.pde_v_biases)
         return pde_u, pde_v
@@ -171,8 +172,14 @@ class DeepHPM:
         v_x = tf.gradients(v, x)[0]
         u_xx = tf.gradients(u_x, x)[0]
         v_xx = tf.gradients(v_x, x)[0]
+        u_xxx = tf.gradients(u_xx,x)[0]
+        v_xxx = tf.gradients(v_xx,x)[0]
+        u_xxxx = tf.gradients(u_xxx,x)[0]
+        v_xxxx = tf.gradients(v_xxx,x)[0]
         
-        terms = tf.concat([u,v,u_x,v_x,u_xx,v_xx],1)
+
+        #terms = tf.concat([u,v,u_x,v_x,u_xx,v_xx,u_xxx,v_xxx,u_xxxx,v_xxxx],1)
+        terms = tf.concat([u,v,u_x,v_x],1)
         
         pde_u, pde_v = self.net_pde(terms)
         
@@ -333,8 +340,13 @@ class DeepHPM:
         
         u_xx = tf.gradients(u_x, x)[0]
         v_xx = tf.gradients(v_x, x)[0]
+        u_xxx = tf.gradients(u_xx,x)[0]
+        v_xxx = tf.gradients(v_xx,x)[0]
+        u_xxxx = tf.gradients(u_xxx,x)[0]
+        v_xxxx = tf.gradients(v_xxx,x)[0]
         
-        terms = tf.concat([u,v,u_x,v_x,u_xx,v_xx],1)
+        #terms = tf.concat([u,v,u_x,v_x,u_xx,v_xx,u_xxx,v_xxx,u_xxxx,v_xxxx],1)
+        terms = tf.concat([u,v,u_x,v_x],1)
         
         pde_u, pde_v = self.net_pde(terms)
         
